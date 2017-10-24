@@ -139,7 +139,8 @@ function searchStudies($patient_id = null, $name = null, $modality = null, $from
     // return $char_set . "_ci";
 }
 
-function getInstitutionName($study_pk){
+function getInstitutionName($study_pk)
+{
     $conn = connect('pacsdb');
     $query = "SELECT series.institution FROM series WHERE series.study_fk = :study_pk ;";
     $query = $conn->prepare($query);
