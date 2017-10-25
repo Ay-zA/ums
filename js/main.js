@@ -184,6 +184,7 @@ function printStudies(data) {
     output += '<td><a class="weasis-btn flat-btn" href="' + url + '"><span class="glyphicon glyphicon-eye-open"></span></button><td>';
     output += '</tr>';
   }
+  console.log(output);
   patient_table.html(output);
 }
 
