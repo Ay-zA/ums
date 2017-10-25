@@ -83,9 +83,11 @@ function getAllInstances($serie_pk)
     return $result;
 }
 
-function searchStudies($patient_id = null, $name = null, $modality = null, $from = null, $to = null, $limit, $offset)
+function searchStudies($patient_id = null, $name = null, $modality = null, $from = null, $to = null, $limit = 20, $offset = 0)
 {
     global $char_set;
+    $limit = (int)$limit;
+    $offset = (int)$offset;
     $conn = connect('pacsdb');
 
     $query = 'SELECT patient.pk,
@@ -128,12 +130,9 @@ function searchStudies($patient_id = null, $name = null, $modality = null, $from
         $query = $query.' AND study.study_datetime <= :to';
     }
 
-    $query = $query.' ORDER BY study.study_datetime DESC LIMIT' . ' :limit OFFSET :offset;';
-
+    $query = $query.' ORDER BY study.study_datetime DESC LIMIT :limit OFFSET :offset;';// LIMIT :limit OFFSET :offset;';
     $query = $conn->prepare($query);
 
-    $query->bindParam(':limit', $limit);
-    $query->bindParam(':offset', $offset);
 
     if (isset($patient_id)) {
         $query->bindParam(':id', $patient_id);
@@ -150,10 +149,12 @@ function searchStudies($patient_id = null, $name = null, $modality = null, $from
     if (isset($to)) {
         $query->bindParam(':to', $to);
     }
+    echo $limit;
+    $query->bindParam(':limit', $limit);
+    $query->bindParam(':offset', $offset);
 
     $query->execute();
     $result = $query->fetchAll();
-
     return $result;
     // return $char_set . "_ci";
 }
