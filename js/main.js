@@ -161,6 +161,7 @@ function loadSeriesData() {
 }
 
 function printStudies(data) {
+  console.log(':|');
   var page = 1;
   var page_size = 20;
   var output = '';
