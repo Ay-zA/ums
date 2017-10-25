@@ -60,3 +60,4 @@
   }
 
  exit(json_encode($response));
+?>

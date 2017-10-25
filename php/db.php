@@ -170,3 +170,4 @@ function getInstitutionName($study_pk)
     $result = $query->fetch(PDO::FETCH_ASSOC);
     return $result;
 }
+?>
