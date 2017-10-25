@@ -86,8 +86,6 @@ function getAllInstances($serie_pk)
 function searchStudies($patient_id = null, $name = null, $modality = null, $from = null, $to = null, $limit = 20, $offset = 0)
 {
     global $char_set;
-    $limit = (int)$limit;
-    $offset = (int)$offset;
     $conn = connect('pacsdb');
 
     $query = 'SELECT patient.pk,
@@ -149,9 +147,9 @@ function searchStudies($patient_id = null, $name = null, $modality = null, $from
     if (isset($to)) {
         $query->bindParam(':to', $to);
     }
-    echo $limit;
-    $query->bindParam(':limit', $limit);
-    $query->bindParam(':offset', $offset);
+
+    $query->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $query->bindParam(':offset', $offset, PDO::PARAM_INT);
 
     $query->execute();
     $result = $query->fetchAll();
