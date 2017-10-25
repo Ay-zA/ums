@@ -20,7 +20,7 @@ function connect($dbname)
 function getAllPatient()
 {
     $conn = connect('pacsdb');
-    $query = $conn->prepare('SELECT patient.pk, patient.pat_id , patient.pat_name, patient.pat_sex, study.num_series,
+    $query = $conn->prepare('SELECT patient.pk, patient.pat_id, patient.pat_name, patient.pat_sex, study.num_series,
                           study.pk AS study_pk, study.mods_in_study, study.num_instances, study.study_iuid,
                           patient.pat_birthdate ,study.study_id, study.study_datetime, study.study_desc, study.study_status
                           FROM patient INNER JOIN study ON patient.pk = study.patient_fk ORDER BY study.study_datetime DESC;');
@@ -83,38 +83,57 @@ function getAllInstances($serie_pk)
     return $result;
 }
 
-function searchStudies($patient_id = null, $name = null, $modality = null, $from = null, $to = null)
+function searchStudies($patient_id = null, $name = null, $modality = null, $from = null, $to = null, $limit, $offset)
 {
     global $char_set;
     $conn = connect('pacsdb');
 
-    $query = 'SELECT patient.pk, patient.pat_id , patient.pat_name, patient.pat_sex, study.num_series,
-                          study.pk AS study_pk, study.mods_in_study, study.num_instances, study.study_iuid,
-                          patient.pat_birthdate ,study.study_id, study.study_datetime, study.study_desc, study.study_status
-                          FROM patient INNER JOIN study ON patient.pk = study.patient_fk WHERE 1 = 1';
+    $query = 'SELECT patient.pk,
+                     patient.pat_id,
+                     patient.pat_name,
+                     patient.pat_sex,
+                     study.num_series,
+                     study.pk AS study_pk,
+                     study.mods_in_study,
+                     study.num_instances,
+                     study.study_iuid,
+                     patient.pat_birthdate,
+                     study.study_id,
+                     study.study_datetime,
+                     study.study_desc,
+                     study.study_status
+              FROM patient INNER JOIN study
+              ON patient.pk = study.patient_fk';
 
     if (isset($patient_id)) {
         $patient_id = strtolower($patient_id);
         $query = $query.' AND LOWER(patient.pat_id) LIKE CONCAT (:id,"%")';
     }
+
     if (isset($name)) {
         $name = strtolower($name);
         $query = $query.' AND LOWER(patient.pat_name) LIKE CONCAT ("%",:name,"%")';
     }
+
     if (isset($modality)) {
         $modality = strtolower($modality);
         $query = $query.' AND LOWER(study.mods_in_study) LIKE CONCAT ("%",:modality,"%")';
     }
+
     if (isset($from)) {
         $query = $query.' AND study.study_datetime >= :from';
     }
+
     if (isset($to)) {
         $query = $query.' AND study.study_datetime <= :to';
     }
 
-    $query = $query.' ORDER BY study.study_datetime DESC;';
+    $query = $query.' ORDER BY study.study_datetime DESC LIMIT' . ' :limit OFFSET :offset;';
 
     $query = $conn->prepare($query);
+
+    $query->bindParam(':limit', $limit);
+    $query->bindParam(':offset', $offset);
 
     if (isset($patient_id)) {
         $query->bindParam(':id', $patient_id);
@@ -151,5 +170,3 @@ function getInstitutionName($study_pk)
     $result = $query->fetch(PDO::FETCH_ASSOC);
     return $result;
 }
-
-?>
