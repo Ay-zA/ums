@@ -167,7 +167,7 @@ function printStudies(data) {
   for (var i = (page - 1) * page_size; i < page * page_size; i++) {
     if (!data[i]) break;
 
-    output += '<tr loaded="false" data-iuid=' + data[i].study_iuid + ' data-study-id=' + data[i].study_pk + '>';
+    output += '<tr loaded="false" data-iuid=' + data[i].study_iuid + ' data-study-id=' + data[i].study_pk + ' click="onSelectStudie(' + data[i].study_iuid + ');">';
     output += '<td data-type="pat_id">' + data[i]['pat_id'] + '</td>';
     output += '<td data-type="pat_name">' + fix_name(data[i]['pat_name']) + '</td>';
 
@@ -185,6 +185,10 @@ function printStudies(data) {
     output += '</tr>';
   }
   patient_table.html(output);
+}
+
+function onSelectStudie(iuid) {
+  selected_study_uid = iuid;
 }
 
 function toggleModal(modalId) {
