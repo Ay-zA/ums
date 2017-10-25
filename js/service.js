@@ -43,7 +43,7 @@ function generateRequestURL(study_UID, serie_UID, instance_UID, frame = 1) {
 
 function searchStudies(pat_id = '', pat_name = '', modality = '', from_date = '', to_date = '', limit = 20, offset = 0) {
   // console.log(from_date);
-  url = 'api/service.php?action=searchstudies&id=' + pat_id + '&name=' + pat_name + '&modality=' + modality + '&from=' + from_date + '&to=' + to_date + '&limit=' + limit + '$offset=' + offset;
+  url = 'api/service.php?action=searchstudies&id=' + pat_id + '&name=' + pat_name + '&modality=' + modality + '&from=' + from_date + '&to=' + to_date + '&limit=' + limit + '&offset=' + offset;
   console.log(url);
 
   $.getJSON(url, printStudies);

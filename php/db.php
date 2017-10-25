@@ -87,6 +87,8 @@ function searchStudies($patient_id = null, $name = null, $modality = null, $from
 {
     global $char_set;
     $conn = connect('pacsdb');
+    $limit = (int)$limit;
+    $offset = (int)$offset;
 
     $query = 'SELECT patient.pk,
                      patient.pat_id,
