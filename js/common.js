@@ -2,7 +2,7 @@ var date_regex = /^\d{4}\/(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])$/;
 
 function fix_name(name) {
   name = name.replace(/[\^]+/g, ' ');
-  var output = "";
+  var output = '';
   name.split(' ').forEach(function(string) {
     output += string.charAt(0).toUpperCase() + string.slice(1).toLowerCase() + ' ';
   });
@@ -35,10 +35,8 @@ function format_date(date) {
   var mm = date.getMonth() + 1; //January is 0!
 
   var yyyy = date.getFullYear();
-  if (dd < 10)
-    dd = '0' + dd;
-  if (mm < 10)
-    mm = '0' + mm;
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
   return yyyy + '/' + mm + '/' + dd;
 }
 
@@ -47,7 +45,7 @@ function get_date(dateTime) {
 }
 
 function is_valid_date(date) {
-  return date_regex.test(date)
+  return date_regex.test(date);
 }
 
 var delay = (function() {
